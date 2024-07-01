@@ -225,7 +225,7 @@ a {
     .product-section .product-item .icon-cross {
       position: absolute;
       width: 35px;
-      height: 35px;
+      height: 45px;
       display: inline-block;
       background: #2f2f2f;
       bottom: 15px;
@@ -709,3 +709,4 @@ textarea {
     height: 50px;
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
+
