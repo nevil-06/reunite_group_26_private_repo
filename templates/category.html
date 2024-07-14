@@ -72,7 +72,8 @@
 							</div>
 						</div>
 					</div>
-
+                    
+                    {% if "clothing" in category_title|lower %}
 					<div class="filter-color p-t-22 p-b-50 bo3">
 						<div class="m-text15 p-b-12">
 							Color
@@ -122,7 +123,7 @@
 							</li>
 						</ul>
 					</div>
-
+                    {% endif %}
 					<div class="search-product pos-relative bo4 of-hidden">
 						<input class="s-text7 size6 p-l-23 p-r-50" type="text" name="search-product"
 							placeholder="Search Products...">
