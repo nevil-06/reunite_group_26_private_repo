@@ -81,16 +81,11 @@ class Item(models.Model):
     ]
     
     size = models.CharField(
+        null=True,
+        blank=True,  # Allows the form to submit without a value for this field
         max_length=3,
         choices=SIZE_CHOICES,
-        default='M',  # Default to Medium
-        validators=[
-            RegexValidator(
-                regex=r'^[A-Za-z]+$',
-                message='Only alphabetical characters are allowed.',
-                code='invalid_size'
-            )
-        ]
+        
     )
     
     color = models.CharField(
@@ -109,6 +104,7 @@ class Item(models.Model):
     description_long = models.TextField()
     image = models.ImageField(upload_to='items/')
     is_active = models.BooleanField(default=True)
+    material = models.CharField(max_length=255,null=True)
 
     def __str__(self):
         return self.title

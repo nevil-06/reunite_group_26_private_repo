@@ -1,0 +1,17 @@
+<!-- templates/search_results.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Search Results</h2>
+{% if results %}
+    <ul>
+        {% for item in results %}
+        <li>
+            <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+{% endblock content %}
