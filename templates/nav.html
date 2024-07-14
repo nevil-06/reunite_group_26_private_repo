@@ -51,7 +51,7 @@
 						</ul>
 						<!-- <span class="haru-heading-title haru-heading-title--topbar-1">ReUnite </span> -->
 				<div class="topbar-child2">
-					<ul class="main_menu" text-align = "right">
+					<ul class="main_menu" style="text-align: right;">
 						{% if request.user.is_authenticated %}
 							<li>
 								<a href="{% url 'core:order-summary' %}">Cart<span class="badge badge-dark">{{ request.user|cart_item_count }}</span></a>
@@ -59,7 +59,7 @@
 							<li>
 								<a href="{% url 'account_logout' %}">Logout</a>
 							</li>
-							{% else %}
+						{% else %}
 							<li>
 								<img src="{% static 'images/icons/icon-header-01.png' %}" class="header-icon1" alt="ICON">
 								<ul class="sub_menu">
@@ -67,8 +67,17 @@
 									<li><a href="{% url 'account_signup' %}">SignUp</a></li>
 								</ul>
 							</li>
-						{% endif %}						
+						{% endif %}
+						
+						<!-- Search Form -->
+						<li>
+							<form method="GET" action="{% url 'core:search' %}" class="form-inline my-2 my-lg-0">
+								<input class="form-control mr-sm-2" type="text" placeholder="Search" name="query">
+								<button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+							</form>
+						</li>
 					</ul>
+					
 				</div>
 					</nav>
 				</div>
