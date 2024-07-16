@@ -100,7 +100,7 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField(unique=True)
     stock_no = models.CharField(max_length=10)
-    description_short = models.CharField(max_length=50)
+    description_short = models.CharField(max_length=100)
     description_long = models.TextField()
     image = models.ImageField(upload_to='items/')
     is_active = models.BooleanField(default=True)
