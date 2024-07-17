@@ -80,6 +80,26 @@
 			</div>
             {% endif %}
 
+			{% if object.category.title == 'TextBooks' %}
+			<div class="p-t-33 p-b-20">
+				<div class="flex-m flex-w p-b-10">
+					<!-- Size Options -->
+					<div class="s-text15 w-size15 t-left">Author:</div>
+					<div class="rs2-select2 rs3-select2 w-size16">
+						<span>{{ object.author }}</span>
+						<!-- You can dynamically populate size options here if needed -->
+					</div>
+			
+					<!-- Color Options -->
+					<div class="s-text15 w-size15 t-left">Book Category:</div>
+					<div class="rs2-select2 rs3-select2 w-size16">
+						<span>{{ object.book_category }}</span>
+						<!-- You can dynamically populate color options here if needed -->
+					</div>
+				</div>
+			</div>
+            {% endif %}
+
             <!-- Material and Additional Details for Furniture -->
             {% if object.category.title == 'Furniture' %}
 			<div class="p-t-33 p-b-20">

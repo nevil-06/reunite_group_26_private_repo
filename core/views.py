@@ -11,6 +11,9 @@ from .forms import CheckoutForm, CouponForm, RefundForm
 from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import Item
 
 # Create your views here.
 import random
@@ -124,6 +127,40 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect("/")
 
 
+def search(request):
+    query = request.GET.get('q')
+    sorting = request.GET.get('sorting')
+    results = []
+
+    if query:
+        results = Item.objects.filter(
+            Q(title__icontains=query) |
+            Q(description_short__icontains=query) |
+            Q(description_long__icontains=query) |
+            Q(author__icontains=query) |
+            Q(book_category__icontains=query) |
+            Q(color__icontains=query) & ~Q(color='') |
+            Q(size__icontains=query) |
+            Q(category__title__icontains=query)
+        ).distinct()
+
+        if sorting == 'price_asc':
+            results = results.order_by('price')
+        elif sorting == 'price_desc':
+            results = results.order_by('-price')
+
+        print(f"Query: {query}")
+        print(f"Results count: {results.count()}")
+
+    context = {
+        'results': results,
+        'query': query,
+        'sorting': sorting,
+    }
+    return render(request, 'search_results.html', context)
+
+
+
 class ShopView(ListView):
     model = Item
     paginate_by = 6
@@ -139,25 +176,46 @@ class ItemDetailView(DetailView):
 #     model = Category
 #     template_name = "category.html"
 
+# class CategoryView(View):
+#     def get(self, *args, **kwargs):
+#         category = Category.objects.get(slug=self.kwargs['slug'])
+#         item = Item.objects.filter(category=category, is_active=True)
+#         context = {
+#             'object_list': item,
+#             'category_title': category,
+#             'category_description': category.description,
+#             'category_image': category.image
+#         }
+#         return render(self.request, "category.html", context)
+
 class CategoryView(View):
     def get(self, *args, **kwargs):
-        category = Category.objects.get(slug=self.kwargs['slug'])
-        item = Item.objects.filter(category=category, is_active=True)
+        category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        items = Item.objects.filter(category=category, is_active=True)
+
+        # Sorting
+        sorting = self.request.GET.get('sorting')
+        if sorting == 'price_asc':
+            items = items.order_by('price')
+        elif sorting == 'price_desc':
+            items = items.order_by('-price')
+
+        # Pagination
+        paginator = Paginator(items, 12)  # Show 12 items per page
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context = {
-            'object_list': item,
-            'category_title': category,
+            'object_list': page_obj,
+            'category_title': category.title,
             'category_description': category.description,
-            'category_image': category.image
+            'category_image': category.image,
+            'is_paginated': page_obj.has_other_pages(),
+            'page_obj': page_obj,
+            'paginator': paginator,
+            'sorting': sorting,
         }
         return render(self.request, "category.html", context)
-    
-def search(request):
-    query = request.GET.get('q')
-    if query:
-        results = Item.objects.filter(title__icontains=query)
-    else:
-        results = Item.objects.none()
-    return render(request, 'search_results.html', {'results': results})
 
 
 class CheckoutView(View):
