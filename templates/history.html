@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .product-title:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <div style="margin-left: 10%; margin-top: 5%">
+        <h1>History</h1>
+        <div style="margin-top: 2%;">
+            {% if items %}
+            <ul>
+                {% for item in items %}
+                    <li style="margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center;">
+                            <img src="{{ item.image.url }}" alt="{{ item.title }}"
+                                 style="width: 50px; height: 50px; object-fit: cover; margin-right: 20px;">
+                            <div>
+                                <a href="{{ item.get_absolute_url }}"
+                                   style="font-weight: bold; color: black;"
+                                   class="product-title">{{ item.title }}</a>
+                                <p style="margin: 0;">${{ item.price }}</p>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have not viewed any products yet.</p>
+        {% endif %}
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
