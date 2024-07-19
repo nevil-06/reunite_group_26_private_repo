@@ -13,6 +13,7 @@ from .views import (
     RequestRefundView,
     CategoryView, history_view
 )
+from .views import search
 
 app_name = 'core'
 
@@ -29,5 +30,6 @@ urlpatterns = [
     path('remove-item-from-cart/<slug>/', remove_single_item_from_cart,name='remove-single-item-from-cart'),
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
-    path('history/', history_view, name='history')
+    path('history/', history_view, name='history'),
+    path('search/', search, name='search'),
 ]

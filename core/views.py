@@ -175,6 +175,14 @@ class CategoryView(View):
             'category_image': category.image
         }
         return render(self.request, "category.html", context)
+    
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        results = Item.objects.filter(title__icontains=query)
+    else:
+        results = Item.objects.none()
+    return render(request, 'search_results.html', {'results': results})
 
 def history_view(request):
     # Get the product list from the cookie
