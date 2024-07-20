@@ -134,6 +134,30 @@ class ItemDetailView(DetailView):
     model = Item
     template_name = "product-detail.html"
 
+    def get(self, request, *args, **kwargs):
+        # Call the parent get method
+        response = super().get(request, *args, **kwargs)
+
+        # Get the existing list of viewed products from the cookie
+        viewed_products = request.COOKIES.get('viewed_products')
+
+        # If the cookie exists, load the product list from the cookie
+        if viewed_products is not None:
+            viewed_products = viewed_products.split()
+        else:
+            # If the cookie doesn't exist, start a new list
+            viewed_products = []
+
+        # Add the current product ID to the list
+
+        viewed_products.append(self.object.id)
+
+        # Store the updated product list in the cookie
+        # response = HttpResponse("Product page")
+        response.set_cookie('viewed_products', ' '.join(str(i) + ' ' for i in viewed_products))
+
+        return response
+
 
 # class CategoryView(DetailView):
 #     model = Category
@@ -390,3 +414,20 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
+
+
+def history_view(request):
+    # Get the product list from the cookie
+    viewed_products = request.COOKIES.get('viewed_products')
+
+    if viewed_products is not None:
+        # Convert the space-separated string back into a list
+        viewed_products = viewed_products.split()
+
+        # Retrieve the Item objects for the product IDs
+        items = Item.objects.filter(id__in=viewed_products)
+    else:
+        # If the cookie doesn't exist, display a message
+        items = None
+
+    return render(request, 'history.html', {'items': items})

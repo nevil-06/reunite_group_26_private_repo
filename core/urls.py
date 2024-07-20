@@ -11,7 +11,7 @@ from .views import (
     PaymentView,
     AddCouponView,
     RequestRefundView,
-    CategoryView
+    CategoryView, history_view
 )
 from .views import search
 
@@ -31,5 +31,6 @@ urlpatterns = [
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('search/', search, name='search'),
+    path('history/', history_view, name='history')
 
 ]
