@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- breadcrumb -->
+<div class="bread-crumb bgwhite flex-w p-l-52 p-r-15 p-t-30 p-l-15-sm">
+    <a href="/" class="s-text16">Home
+        <i class="fa fa-angle-right m-l-8 m-r-9" aria-hidden="true"></i>
+    </a>
+
+    <a href="{% url 'core:category' object.category.slug %}" class="s-text16">
+        {{ object.category }}
+        <i class="fa fa-angle-right m-l-8 m-r-9" aria-hidden="true"></i>
+    </a>
+
+    <span class="s-text17">
+        {{ object.title }}
+    </span>
+</div>
+
+<!-- Product Detail -->
+<div class="container bgwhite p-t-35 p-b-80">
+    <div class="flex-w flex-sb">
+        <div class="w-size13 p-t-30 respon5">
+            <div class="wrap-slick3 flex-sb flex-w">
+                <div class="wrap-slick3-dots"></div>
+
+                <div class="slick3">
+                    <div class="item-slick3" data-thumb="{{ object.image.url }}">
+                        <div class="wrap-pic-w">
+                            <img src="{{ object.image.url }}" alt="{{ object.title }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-size14 p-t-30 respon5">
+            <h4 class="product-detail-name m-text16 p-b-13">
+                {{ object.title }}
+            </h4>
+
+            {% if object.discount_price %}
+                <span class="block2-oldprice m-text7 p-r-5" style="font-size: 1.5rem;">
+                    ${{ object.price }}
+                </span>
+
+                <span class="block2-newprice m-text8 p-r-5" style="font-size: 1.5rem;">
+                    ${{ object.discount_price }}
+                </span>
+            {% else %}
+                <span class="m-text17">
+                    ${{ object.price }}
+                </span>
+            {% endif %}
+
+            <p class="s-text8 p-t-10">
+                {{ object.description_short }}
+            </p>
+
+            <!-- Size and Color Options for Clothing -->
+            {% if object.category.title == 'Clothing' %}
+			<div class="p-t-33 p-b-20">
+				<div class="flex-m flex-w p-b-10">
+					<!-- Size Options -->
+					<div class="s-text15 w-size15 t-center">Size:</div>
+					<div class="rs2-select2 rs3-select2 w-size16">
+						<span>{{ object.size }}</span>
+						<!-- You can dynamically populate size options here if needed -->
+					</div>
+			
+					<!-- Color Options -->
+					<div class="s-text15 w-size15 t-center">Color:</div>
+					<div class="rs2-select2 rs3-select2 w-size16">
+						<span>{{ object.color }}</span>
+						<!-- You can dynamically populate color options here if needed -->
+					</div>
+				</div>
+			</div>
+            {% endif %}
+
+            <!-- Material and Additional Details for Furniture -->
+            {% if object.category.title == 'Furniture' %}
+			<div class="p-t-33 p-b-20">
+				<div class="flex-m flex-w p-b-10">
+					<!-- Size Options -->
+					<div class="s-text15 w-size15 t-center">Color:</div>
+					<div class="rs2-select2 rs3-select2 w-size16">
+						<span>{{ object.color }}</span>
+						<!-- You can dynamically populate size options here if needed -->
+					</div>
+			
+					<!-- Color Options -->
+					<div class="s-text15 w-size15 t-center">Material:</div>
+					<div class="rs2-select2 rs3-select2 w-size16">
+						<span>{{ object.material }}</span>
+						<!-- You can dynamically populate color options here if needed -->
+					</div>
+				</div>
+			</div>
+            {% endif %}
+
+            <!-- Add to Cart Section -->
+            <div>
+                <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary" style="margin: 2px;">Add to Cart</a>
+                <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-outline-dark" style="margin: 2px;">Remove from Cart</a>
+            </div>
+
+            <br>
+            <div class="p-b-20">
+                <span class="s-text8 m-r-35">SKU: {{ object.stock_no }}</span>
+                <span class="s-text8">Categories: {{ object.category }}</span>
+            </div>
+
+            <!-- Description -->
+            <div class="wrap-dropdown-content bo6 p-t-15 p-b-14 active-dropdown-content">
+                <h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                    Description
+                    <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                    <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                    <p class="s-text8">
+                        {{ object.description_long }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
