@@ -457,8 +457,6 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
-<<<<<<< Updated upstream
-=======
 
 def history_view(request):
     # Get the product list from the cookie
@@ -519,4 +517,3 @@ def success(request):
 
 def success(request):
     return render(request, 'success.html')
->>>>>>> Stashed changes
