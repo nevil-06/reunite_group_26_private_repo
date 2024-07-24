@@ -11,7 +11,7 @@ from .views import (
     PaymentView,
     AddCouponView,
     RequestRefundView,
-    CategoryView, history_view
+    CategoryView, history_view, success, list_item
 )
 from .views import search
 
@@ -32,4 +32,11 @@ urlpatterns = [
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('history/', history_view, name='history'),
     path('search/', search, name='search'),
+<<<<<<< Updated upstream
+=======
+    path('history/', history_view, name='history'),
+    path('list_item/', list_item, name='list_item'),
+    path('success/', success, name='success'),
+
+>>>>>>> Stashed changes
 ]

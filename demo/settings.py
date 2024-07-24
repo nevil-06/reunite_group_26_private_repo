@@ -1,6 +1,8 @@
 import os
 
+
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,6 +36,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'core.middleware.UserHistoryMiddleware',
+
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -117,3 +121,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STRIPE_PUBLIC_KEY = 'pk_test_lX3r6OMjOU2yzFsNSHq6belT00EY82kZmH'
 STRIPE_SECRET_KEY = 'sk_test_tn0CTDaIJHUJyAqhsf39cfsC00LNjsqDnb'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = config('EMAIL_HOST')
+# EMAIL_PORT = config('EMAIL_PORT', cast=int)
+# EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')

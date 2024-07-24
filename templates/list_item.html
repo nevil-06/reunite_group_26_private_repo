@@ -1,0 +1,114 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Your Item</title>
+</head>
+<body>
+    <h2>List Your Item</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html> -->
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Your Item</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 50px;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="form-title">List Your Item</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.slug.label_tag }}
+                {{ form.slug|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.size.label_tag }}
+                {{ form.size|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.color.label_tag }}
+                {{ form.color|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.price.label_tag }}
+                {{ form.price|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.discount_price.label_tag }}
+                {{ form.discount_price|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.category.label_tag }}
+                {{ form.category|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.label.label_tag }}
+                {{ form.label|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.stock_no.label_tag }}
+                {{ form.stock_no|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.description_short.label_tag }}
+                {{ form.description_short|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.description_long.label_tag }}
+                {{ form.description_long|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.image.label_tag }}
+                {{ form.image|add_class:"form-control-file" }}
+            </div>
+            <div class="form-group form-check">
+                {{ form.is_active }}
+                {{ form.is_active.label_tag }}
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

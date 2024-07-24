@@ -56,6 +56,9 @@
                     </li>
                     {% categories %}
                     <li>
+                        <a href="/list_item">List Item</a>
+                    </li>
+                    <li>
                         <a href="/history">History</a>
                     </li>
 
@@ -68,6 +71,10 @@
                                 <a href="{% url 'core:order-summary' %}">Cart<span
                                         class="badge badge-dark">{{ request.user|cart_item_count }}</span></a>
                             </li>
+<<<<<<< Updated upstream
+=======
+                            
+>>>>>>> Stashed changes
                             <li>
                                 <a href="{% url 'account_logout' %}">Logout</a>
                             </li>
@@ -81,6 +88,17 @@
                                 </ul>
                             </li>
                         {% endif %}
+<<<<<<< Updated upstream
+=======
+                        <!-- Search Form -->
+                        <li>
+                            <form method="GET" action="{% url 'core:search' %}" class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="text" placeholder="Search" name="q" style="
+                                margin-left: 10px;" value="{{ query }}">
+                                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </li>
+>>>>>>> Stashed changes
                     </ul>
                 </div>
             </nav>
@@ -243,6 +261,10 @@
                         <a href="{% url 'core:order-summary' %}">Cart<span
                                 class="badge badge-dark">{{ request.user|cart_item_count }}</span></a>
                     </li>
+<<<<<<< Updated upstream
+=======
+                    
+>>>>>>> Stashed changes
                     <li class="item-menu-mobile">
                         <a href="{% url 'account_logout' %}">Logout</a>
                     </li>

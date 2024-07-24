@@ -9,10 +9,13 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import redirect
 from django.utils import timezone
-from .forms import CheckoutForm, CouponForm, RefundForm
+from .forms import CheckoutForm, CouponForm, RefundForm, ItemForm
 from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.db.models import Q
+
 
 # Create your views here.
 import random
@@ -178,11 +181,36 @@ class CategoryView(View):
     
 def search(request):
     query = request.GET.get('q')
+    sorting = request.GET.get('sorting')
+    results = []
+
     if query:
-        results = Item.objects.filter(title__icontains=query)
-    else:
-        results = Item.objects.none()
-    return render(request, 'search_results.html', {'results': results})
+        results = Item.objects.filter(
+            Q(title__icontains=query) |
+            Q(description_short__icontains=query) |
+            Q(description_long__icontains=query) |
+            Q(author__icontains=query) |
+            Q(book_category__icontains=query) |
+            Q(color__icontains=query) & ~Q(color='') |
+            Q(size__icontains=query) |
+            Q(category__title__icontains=query)
+        ).distinct()
+
+        if sorting == 'price_asc':
+            results = results.order_by('price')
+        elif sorting == 'price_desc':
+            results = results.order_by('-price')
+
+        print(f"Query: {query}")
+        print(f"Results count: {results.count()}")
+
+    context = {
+        'results': results,
+        'query': query,
+        'sorting': sorting,
+    }
+    return render(request, 'search_results.html', context)
+
 
 def history_view(request):
     # Get the product list from the cookie
@@ -429,3 +457,66 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
+<<<<<<< Updated upstream
+=======
+
+def history_view(request):
+    # Get the product list from the cookie
+    viewed_products = request.COOKIES.get('viewed_products')
+
+    if viewed_products is not None:
+        # Convert the space-separated string back into a list
+        viewed_products = viewed_products.split()
+
+        # Retrieve the Item objects for the product IDs
+        items = Item.objects.filter(id__in=viewed_products)
+    else:
+        # If the cookie doesn't exist, display a message
+        items = None
+
+    # Get the user's visit history from the session
+    visit_history = request.session.get('visit_history', {})
+
+    # Get the currently logged-in user
+    current_user = request.user if request.user.is_authenticated else None
+
+    # Get the count of active users
+    authenticated_users_count = User.objects.filter(is_active=True).count()
+
+    return render(request, 'history.html', {
+        'items': items,
+        'visit_history': visit_history,
+        'current_user': current_user,
+        'authenticated_users_count': authenticated_users_count,
+    })
+@login_required
+def list_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('core:success')  # Redirect to a success page or wherever you want
+    else:
+        form = ItemForm()
+    return render(request, 'list_item.html', {'form': form})
+
+def success(request):
+    return render(request, 'success.html')
+# @login_required
+# def list_item(request):
+#     if request.method == 'POST':
+#         form = ItemForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Item successfully listed.')
+#             return redirect("core:index")
+#         else:
+#             return redirect("core:index")
+#     else:
+#         form = ItemForm()
+#     return render(request, 'list_item.html', {'form': form})
+
+
+def success(request):
+    return render(request, 'success.html')
+>>>>>>> Stashed changes
