@@ -1,4 +1,6 @@
 from django.urls import path
+from .views import search
+from .views import list_item, success
 from .views import (
     ItemDetailView,
     HomeView,
@@ -13,7 +15,8 @@ from .views import (
     RequestRefundView,
     CategoryView
 )
-from .views import search
+
+
 
 app_name = 'core'
 
@@ -31,5 +34,6 @@ urlpatterns = [
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('search/', search, name='search'),
-
+    path('list_item/', list_item, name='list_item'),
+    path('success/', success, name='success'),
 ]

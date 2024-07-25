@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,10 +11,12 @@ from django.utils import timezone
 from .forms import CheckoutForm, CouponForm, RefundForm
 from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Item
+from django.shortcuts import render
+from .forms import ItemForm
+
 
 # Create your views here.
 import random
@@ -158,6 +161,19 @@ def search(request):
         'sorting': sorting,
     }
     return render(request, 'search_results.html', context)
+
+def list_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('core:success')  # Redirect to a success page or wherever you want
+    else:
+        form = ItemForm()
+    return render(request, 'list_item.html', {'form': form})
+
+def success(request):
+    return render(request, 'success.html')
 
 
 
@@ -448,3 +464,6 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
+            
+
+

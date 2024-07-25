@@ -4,6 +4,7 @@ from django.db.models import Sum
 from django.shortcuts import reverse
 from django_countries.fields import CountryField
 from django.core.validators import RegexValidator
+from django.utils.text import slugify
 
 
 # Create your models here.

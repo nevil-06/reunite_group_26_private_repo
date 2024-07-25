@@ -1,6 +1,8 @@
 from django import forms
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
+from .models import Item
+
 
 PAYMENT_CHOICES = (
     ('S', 'Stripe'),
@@ -43,3 +45,10 @@ class RefundForm(forms.Form):
         'rows': 4
     }))
     email = forms.EmailField()
+
+
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = '__all__'
+
