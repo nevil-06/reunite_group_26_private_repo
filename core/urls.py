@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import (
+    AboutUsView,
+    ContactUsView,
     ItemDetailView,
     HomeView,
     add_to_cart,
@@ -31,5 +33,13 @@ urlpatterns = [
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('search/', search, name='search'),
+<<<<<<< Updated upstream
+=======
+    path('history/', history_view, name='history'),
+    path('list_item/', list_item, name='list_item'),
+    path('about/', AboutUsView.as_view(), name='about'),
+    path('contact/', ContactUsView.as_view(), name='contact'),
+    path('success/', success, name='success'),
+>>>>>>> Stashed changes
 
 ]

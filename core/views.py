@@ -13,7 +13,17 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db.models import Q
+<<<<<<< Updated upstream
 from .models import Item
+=======
+from django.shortcuts import render
+from django.views import View
+from django.core.mail import send_mail
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from .forms import ContactForm
+
+>>>>>>> Stashed changes
 
 # Create your views here.
 import random
@@ -127,6 +137,84 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect("/")
 
 
+<<<<<<< Updated upstream
+=======
+class ShopView(ListView):
+    model = Item
+    paginate_by = 6
+    template_name = "shop.html"
+
+class AboutUsView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'about.html')
+
+class ContactUsView(View):
+    def get(self, request, *args, **kwargs):
+        form = ContactForm()
+        return render(request, 'contact.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            # Send email
+            send_mail(
+                f'Message from {name} ({email})',
+                message,
+                email,
+                [settings.CONTACT_EMAIL],  # Replace with your email
+            )
+            return HttpResponseRedirect('/contact/success/')
+        return render(request, 'contact.html', {'form': form})
+
+
+class ItemDetailView(DetailView):
+    model = Item
+    template_name = "product-detail.html"
+    def get(self, request, *args, **kwargs):
+        # Call the parent get method
+        response = super().get(request, *args, **kwargs)
+
+        # Get the existing list of viewed products from the cookie
+        viewed_products = request.COOKIES.get('viewed_products')
+
+        # If the cookie exists, load the product list from the cookie
+        if viewed_products is not None:
+            viewed_products = viewed_products.split()
+        else:
+            # If the cookie doesn't exist, start a new list
+            viewed_products = []
+
+
+        # Add the current product ID to the list
+
+        viewed_products.append(self.object.id)
+
+        # Store the updated product list in the cookie
+        # response = HttpResponse("Product page")
+        response.set_cookie('viewed_products', ' '.join(str(i)+' ' for i in viewed_products))
+
+        return response
+
+# class CategoryView(DetailView):
+#     model = Category
+#     template_name = "category.html"
+
+class CategoryView(View):
+    def get(self, *args, **kwargs):
+        category = Category.objects.get(slug=self.kwargs['slug'])
+        item = Item.objects.filter(category=category, is_active=True)
+        context = {
+            'object_list': item,
+            'category_title': category,
+            'category_description': category.description,
+            'category_image': category.image
+        }
+        return render(self.request, "category.html", context)
+    
+>>>>>>> Stashed changes
 def search(request):
     query = request.GET.get('q')
     sorting = request.GET.get('sorting')

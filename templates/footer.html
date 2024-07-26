@@ -1,40 +1,155 @@
 {% load static %}
 <!-- Footer -->
-<footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45">
-  <div class="flex-w p-b-90">
-    <div class="w-size6 p-t-30 p-l-15 p-r-15 respon3" style="padding-left: 30px;">
-      <h4 class="s-text12 p-b-30">A QUICK OVERVIEW ON HOW WE HELP KEEP THINGS SUSTAINABLE</h4>
+ <style>
+  /* General Footer Styles */
+/* General Footer Styles */
+.footer-sections {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Ensures that content wraps on smaller screens */
+}
 
+.footer-section {
+  flex: 1;
+  min-width: 150px; /* Adjust minimum width */
+  margin: 0 10px; /* Adjust spacing between sections */
+  padding: 10px; /* Adjust padding */
+}
+
+.footer-section h4 {
+  font-size: 16px; /* Reduce font size */
+  margin-bottom: 20px; /* Adjust spacing below heading */
+}
+
+.footer-section ul {
+  padding: 0;
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 5px; /* Adjust spacing between list items */
+}
+
+.footer-section ul li a {
+  font-size: 14px; /* Reduce font size for links */
+}
+
+/* Specific adjustment for the Profile section */
+.profile-section {
+  flex: 0 0 20%; /* Control the width, change percentage as needed */
+  max-width: 200px; /* Set a maximum width */
+  padding: 10px; /* Reduce padding */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-sections {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+/* Expand Section Horizontally */
+.larger-section {
+  flex: 1 1 40%; /* Adjust the flex basis to increase width */
+  min-width: 300px; /* Increase minimum width to ensure it doesn’t shrink too much */
+  max-width: 100%; /* Ensure it uses available space */
+  padding: 20px; /* Increase padding for more space inside */
+  margin: 0 10px; /* Adjust spacing between sections */
+}
+
+.larger-section h4 {
+  font-size: 18px; /* Adjust font size if needed */
+  margin-bottom: 30px; /* Space below heading */
+}
+
+.larger-section p {
+  font-size: 16px; /* Adjust font size if needed */
+  line-height: 1.5; /* Improve readability */
+}
+
+
+
+  </style>
+{% load static %}
+<!-- Footer -->
+<footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45">
+  <div class="flex-w p-b-90 footer-sections">
+    <div class="footer-section larger-section w-size4 p-t-30 p-l-15 p-r-15 respon3">
+      <h4 class="s-text12 p-b-30">A QUICK OVERVIEW ON HOW WE HELP KEEP THINGS SUSTAINABLE</h4>
       <div>
         <p class="s-text7 w-size27">
           ReUnite is an online marketplace that connects students on campus to promote the reuse of goods, fostering
-            a sustainable and community-driven environment.
+          a sustainable and community-driven environment.
         </p>
       </div>
     </div>
+    
 
-    <div class="w-size7 p-t-30 p-l-15 p-r-15 respon4" style="margin-left: auto;">
+    <div class="footer-section profile-section w-size2 p-t-30 p-l-15 p-r-15 respon4">
       <h4 class="s-text12 p-b-30">Profile</h4>
       <ul>
         <li class="p-b-9">
           <a href="{% url 'account_login' %}" class="s-text7">Login</a>
         </li>
-
         <li class="p-b-9">
           <a href="{% url 'account_signup' %}" class="s-text7">SignUp</a>
+        </li>
+        <li class="p-b-9">
+          <a href="{% url 'core:about' %}" class="s-text7">About Us</a>
+        </li>
+        <li class="p-b-9">
+          <a href="{% url 'core:contact' %}" class="s-text7">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer-section w-size2 p-t-30 p-l-15 p-r-15 respon4">
+      <h4 class="s-text12 p-b-30">Contact Info</h4>
+      <ul>
+        <li class="p-b-9">
+          <p class="s-text7">Email: <a href="mailto:info@reunite.com" class="s-text7">info@reunite.com</a></p>
+        </li>
+        <li class="p-b-9">
+          <p class="s-text7">Phone: <a href="tel:+1234567890" class="s-text7">+1 234 567 890</a></p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer-section w-size2 p-t-30 p-l-15 p-r-15 respon4">
+      <h4 class="s-text12 p-b-30">Follow Us</h4>
+      <ul class="social-media">
+        <li class="p-b-9">
+          <a href="https://facebook.com" class="s-text7" target="_blank">
+            <i class="fa fa-facebook" aria-hidden="true"></i> Facebook
+          </a>
+        </li>
+        <li class="p-b-9">
+          <a href="https://twitter.com" class="s-text7" target="_blank">
+            <i class="fa fa-twitter" aria-hidden="true"></i> Twitter
+          </a>
+        </li>
+        <li class="p-b-9">
+          <a href="https://instagram.com" class="s-text7" target="_blank">
+            <i class="fa fa-instagram" aria-hidden="true"></i> Instagram
+          </a>
+        </li>
+        <li class="p-b-9">
+          <a href="https://linkedin.com" class="s-text7" target="_blank">
+            <i class="fa fa-linkedin" aria-hidden="true"></i> LinkedIn
+          </a>
         </li>
       </ul>
     </div>
   </div>
+
+  <!-- Back to top -->
+  <div class="btn-back-to-top bg0-hov" id="myBtn">
+    <span class="symbol-btn-back-to-top">
+      <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+    </span>
+  </div>
+
+  <!-- Container Selection -->
+  <div id="dropDownSelect1"></div>
+  <div id="dropDownSelect2"></div>
 </footer>
-
-<!-- Back to top -->
-<div class="btn-back-to-top bg0-hov" id="myBtn">
-  <span class="symbol-btn-back-to-top">
-    <i class="fa fa-angle-double-up" aria-hidden="true"></i>
-  </span>
-</div>
-
-<!-- Container Selection -->
-<div id="dropDownSelect1"></div>
-<div id="dropDownSelect2"></div>
