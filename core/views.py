@@ -1,3 +1,4 @@
+import json
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,10 +8,22 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import redirect
 from django.utils import timezone
-from .forms import CheckoutForm, CouponForm, RefundForm
+from .forms import CheckoutForm, CouponForm, RefundForm, ItemForm
 from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import Item
 from django.shortcuts import render
+from django.views import View
+from django.core.mail import send_mail
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from .forms import ContactForm
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.db.models import Q
+
 
 # Create your views here.
 import random
@@ -129,11 +142,59 @@ class ShopView(ListView):
     paginate_by = 6
     template_name = "shop.html"
 
+class AboutUsView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'about.html')
+
+class ContactUsView(View):
+    def get(self, request, *args, **kwargs):
+        form = ContactForm()
+        return render(request, 'contact.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            # Send email
+            send_mail(
+                f'Message from {name} ({email})',
+                message,
+                email,
+                [settings.CONTACT_EMAIL],  # Replace with your email
+            )
+            return HttpResponseRedirect('/contact/success/')
+        return render(request, 'contact.html', {'form': form})
+
 
 class ItemDetailView(DetailView):
     model = Item
     template_name = "product-detail.html"
+    def get(self, request, *args, **kwargs):
+        # Call the parent get method
+        response = super().get(request, *args, **kwargs)
 
+        # Get the existing list of viewed products from the cookie
+        viewed_products = request.COOKIES.get('viewed_products')
+
+        # If the cookie exists, load the product list from the cookie
+        if viewed_products is not None:
+            viewed_products = viewed_products.split()
+        else:
+            # If the cookie doesn't exist, start a new list
+            viewed_products = []
+
+
+        # Add the current product ID to the list
+
+        viewed_products.append(self.object.id)
+
+        # Store the updated product list in the cookie
+        # response = HttpResponse("Product page")
+        response.set_cookie('viewed_products', ' '.join(str(i)+' ' for i in viewed_products))
+
+        return response
 
 # class CategoryView(DetailView):
 #     model = Category
@@ -153,13 +214,52 @@ class CategoryView(View):
     
 def search(request):
     query = request.GET.get('q')
+    sorting = request.GET.get('sorting')
+    results = []
+
     if query:
-        results = Item.objects.filter(title__icontains=query)
+        results = Item.objects.filter(
+            Q(title__icontains=query) |
+            Q(description_short__icontains=query) |
+            Q(description_long__icontains=query) |
+            Q(author__icontains=query) |
+            Q(book_category__icontains=query) |
+            Q(color__icontains=query) & ~Q(color='') |
+            Q(size__icontains=query) |
+            Q(category__title__icontains=query)
+        ).distinct()
+
+        if sorting == 'price_asc':
+            results = results.order_by('price')
+        elif sorting == 'price_desc':
+            results = results.order_by('-price')
+
+        print(f"Query: {query}")
+        print(f"Results count: {results.count()}")
+
+    context = {
+        'results': results,
+        'query': query,
+        'sorting': sorting,
+    }
+    return render(request, 'search_results.html', context)
+
+
+def history_view(request):
+    # Get the product list from the cookie
+    viewed_products = request.COOKIES.get('viewed_products')
+
+    if viewed_products is not None:
+        # Convert the space-separated string back into a list
+        viewed_products = viewed_products.split()
+
+        # Retrieve the Item objects for the product IDs
+        items = Item.objects.filter(id__in=viewed_products)
     else:
-        results = Item.objects.none()
-    return render(request, 'search_results.html', {'results': results})
+        # If the cookie doesn't exist, display a message
+        items = None
 
-
+    return render(request, 'history.html', {'items': items})
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         try:
@@ -390,3 +490,63 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
+
+def history_view(request):
+    # Get the product list from the cookie
+    viewed_products = request.COOKIES.get('viewed_products')
+
+    if viewed_products is not None:
+        # Convert the space-separated string back into a list
+        viewed_products = viewed_products.split()
+
+        # Retrieve the Item objects for the product IDs
+        items = Item.objects.filter(id__in=viewed_products)
+    else:
+        # If the cookie doesn't exist, display a message
+        items = None
+
+    # Get the user's visit history from the session
+    visit_history = request.session.get('visit_history', {})
+
+    # Get the currently logged-in user
+    current_user = request.user if request.user.is_authenticated else None
+
+    # Get the count of active users
+    authenticated_users_count = User.objects.filter(is_active=True).count()
+
+    return render(request, 'history.html', {
+        'items': items,
+        'visit_history': visit_history,
+        'current_user': current_user,
+        'authenticated_users_count': authenticated_users_count,
+    })
+@login_required
+def list_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('core:success')  # Redirect to a success page or wherever you want
+    else:
+        form = ItemForm()
+    return render(request, 'list_item.html', {'form': form})
+
+def success(request):
+    return render(request, 'success.html')
+# @login_required
+# def list_item(request):
+#     if request.method == 'POST':
+#         form = ItemForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Item successfully listed.')
+#             return redirect("core:index")
+#         else:
+#             return redirect("core:index")
+#     else:
+#         form = ItemForm()
+#     return render(request, 'list_item.html', {'form': form})
+
+
+def success(request):
+    return render(request, 'success.html')

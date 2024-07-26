@@ -4,6 +4,7 @@ from django.db.models import Sum
 from django.shortcuts import reverse
 from django_countries.fields import CountryField
 from django.core.validators import RegexValidator
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -93,6 +94,8 @@ class Item(models.Model):
         choices=COLOR_CHOICES,
         default='Black'
     )
+    author = models.CharField(max_length=255,null=True,blank=True)
+    book_category =  models.CharField(max_length=255,null=True,blank=True)
     title = models.CharField(max_length=255)  # Add this line or adjust as necessary
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
@@ -100,11 +103,11 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField(unique=True)
     stock_no = models.CharField(max_length=10)
-    description_short = models.CharField(max_length=50)
+    description_short = models.CharField(max_length=500)
     description_long = models.TextField()
     image = models.ImageField(upload_to='items/')
     is_active = models.BooleanField(default=True)
-    material = models.CharField(max_length=255,null=True)
+    material = models.CharField(max_length=255,null=True,blank=True)
 
     def __str__(self):
         return self.title
@@ -236,3 +239,5 @@ class Refund(models.Model):
 
     def __str__(self):
         return f"{self.pk}"
+
+

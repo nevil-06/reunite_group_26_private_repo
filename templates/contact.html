@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+/* Contact Us Page Styles */
+.contact-us-section {
+  background-color: #f9f9f9; /* Light background color for the section */
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.section-title {
+  font-size: 2.5rem; /* Larger font size for the section title */
+  text-align: center;
+  margin-bottom: 30px; /* Space below the title */
+  color: #333; /* Dark color for the title */
+}
+
+.contact-info {
+  max-width: 800px; /* Max width for better readability */
+  margin: 0 auto; /* Center align the content */
+  padding: 0 15px; /* Padding inside the container */
+}
+
+.contact-info p {
+  font-size: 1.125rem; /* Slightly larger font size for paragraphs */
+  line-height: 1.6; /* Improved line height for readability */
+  color: #666; /* Medium gray color for text */
+  margin-bottom: 15px; /* Space below each paragraph */
+}
+
+.contact-form {
+  max-width: 800px; /* Max width for better readability */
+  margin: 0 auto; /* Center align the form */
+  padding: 0 15px; /* Padding inside the container */
+}
+
+.contact-form h2 {
+  font-size: 1.875rem; /* Font size for form heading */
+  margin-bottom: 20px; /* Space below heading */
+  color: #333; /* Dark color for the heading */
+}
+
+.form-group {
+  margin-bottom: 15px; /* Space below form fields */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px; /* Space below label */
+  font-weight: bold; /* Bold label text */
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%; /* Full-width inputs */
+  padding: 10px; /* Padding inside inputs */
+  border: 1px solid #ddd; /* Border around inputs */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.submit-btn {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* Remove default border */
+  padding: 10px 20px; /* Padding inside button */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 1rem; /* Font size for button text */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.submit-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+</style>
+<!-- Contact Us Section -->
+<section class="contact-us-section p-t-50 p-b-50">
+  <div class="container">
+    <h1 class="section-title">Contact Us</h1>
+    <div class="contact-info">
+      <h2 class="contact-heading">We’d Love to Hear from You!</h2>
+      <p class="contact-text">
+        If you have any questions, suggestions, or need assistance, feel free to reach out to us. We are here to help you with any inquiries or concerns you may have.
+      </p>
+      <p class="contact-text">
+        <strong>Email:</strong> support@reunite.com
+      </p>
+      <p class="contact-text">
+        <strong>Phone:</strong> +1 (123) 456-7890
+      </p>
+      <p class="contact-text">
+        <strong>Address:</strong> 123 University Ave, Campus City, Country
+      </p>
+    </div>
+    <div class="contact-form">
+      <h2 class="contact-heading">Send Us a Message</h2>
+      <form action="{% url 'core:contact' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

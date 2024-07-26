@@ -1,5 +1,9 @@
 from django.urls import path
+from .views import history_view, search
+from .views import list_item, success
 from .views import (
+    AboutUsView,
+    ContactUsView,
     ItemDetailView,
     HomeView,
     add_to_cart,
@@ -13,7 +17,7 @@ from .views import (
     RequestRefundView,
     CategoryView
 )
-from .views import search
+
 
 app_name = 'core'
 
@@ -31,5 +35,12 @@ urlpatterns = [
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('search/', search, name='search'),
-
+    path('history/', history_view, name='history'),
+    path('list_item/', list_item, name='list_item'),
+    path('about/', AboutUsView.as_view(), name='about'),
+    path('contact/', ContactUsView.as_view(), name='contact'),
+    path('success/', success, name='success'),
+    path('list_item/', list_item, name='list_item'),
+    path('success/', success, name='success'),
+    path('refund/',RequestRefundView.as_view(),name ='refund'),
 ]
