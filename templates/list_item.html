@@ -14,7 +14,7 @@
     </form>
 </body>
 </html> -->
-{% load core:custom_tags %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,8 +52,8 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                {{ form.name.label_tag }}
-                {{ form.name|add_class:"form-control" }}
+                {{ form.title.label_tag }}
+                {{ form.title|add_class:"form-control" }}
             </div>
             <div class="form-group">
                 {{ form.slug.label_tag }}

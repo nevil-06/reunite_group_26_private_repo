@@ -1,4 +1,4 @@
-from django.shortcuts import render
+import json
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,28 +8,22 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import redirect
 from django.utils import timezone
-from .forms import CheckoutForm, CouponForm, RefundForm
+from .forms import CheckoutForm, CouponForm, RefundForm, ItemForm
 from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.db.models import Q
-<<<<<<< Updated upstream
 from .models import Item
-<<<<<<< HEAD
-=======
 from django.shortcuts import render
 from django.views import View
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from .forms import ContactForm
-
->>>>>>> Stashed changes
-=======
 from django.shortcuts import render
-from .forms import ItemForm
+from django.contrib.auth.models import User
+from django.db.models import Q
 
->>>>>>> a3f2336a48c8c26b763833a2735062daa1781292
 
 # Create your views here.
 import random
@@ -143,8 +137,6 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect("/")
 
 
-<<<<<<< Updated upstream
-=======
 class ShopView(ListView):
     model = Item
     paginate_by = 6
@@ -220,7 +212,6 @@ class CategoryView(View):
         }
         return render(self.request, "category.html", context)
     
->>>>>>> Stashed changes
 def search(request):
     query = request.GET.get('q')
     sorting = request.GET.get('sorting')
@@ -253,78 +244,22 @@ def search(request):
     }
     return render(request, 'search_results.html', context)
 
-def list_item(request):
-    if request.method == 'POST':
-        form = ItemForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('core:success')  # Redirect to a success page or wherever you want
+
+def history_view(request):
+    # Get the product list from the cookie
+    viewed_products = request.COOKIES.get('viewed_products')
+
+    if viewed_products is not None:
+        # Convert the space-separated string back into a list
+        viewed_products = viewed_products.split()
+
+        # Retrieve the Item objects for the product IDs
+        items = Item.objects.filter(id__in=viewed_products)
     else:
-        form = ItemForm()
-    return render(request, 'list_item.html', {'form': form})
+        # If the cookie doesn't exist, display a message
+        items = None
 
-def success(request):
-    return render(request, 'success.html')
-
-
-
-class ShopView(ListView):
-    model = Item
-    paginate_by = 6
-    template_name = "shop.html"
-
-
-class ItemDetailView(DetailView):
-    model = Item
-    template_name = "product-detail.html"
-
-
-# class CategoryView(DetailView):
-#     model = Category
-#     template_name = "category.html"
-
-# class CategoryView(View):
-#     def get(self, *args, **kwargs):
-#         category = Category.objects.get(slug=self.kwargs['slug'])
-#         item = Item.objects.filter(category=category, is_active=True)
-#         context = {
-#             'object_list': item,
-#             'category_title': category,
-#             'category_description': category.description,
-#             'category_image': category.image
-#         }
-#         return render(self.request, "category.html", context)
-
-class CategoryView(View):
-    def get(self, *args, **kwargs):
-        category = get_object_or_404(Category, slug=self.kwargs['slug'])
-        items = Item.objects.filter(category=category, is_active=True)
-
-        # Sorting
-        sorting = self.request.GET.get('sorting')
-        if sorting == 'price_asc':
-            items = items.order_by('price')
-        elif sorting == 'price_desc':
-            items = items.order_by('-price')
-
-        # Pagination
-        paginator = Paginator(items, 12)  # Show 12 items per page
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-
-        context = {
-            'object_list': page_obj,
-            'category_title': category.title,
-            'category_description': category.description,
-            'category_image': category.image,
-            'is_paginated': page_obj.has_other_pages(),
-            'page_obj': page_obj,
-            'paginator': paginator,
-            'sorting': sorting,
-        }
-        return render(self.request, "category.html", context)
-
-
+    return render(request, 'history.html', {'items': items})
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         try:
@@ -555,6 +490,63 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
-            
+
+def history_view(request):
+    # Get the product list from the cookie
+    viewed_products = request.COOKIES.get('viewed_products')
+
+    if viewed_products is not None:
+        # Convert the space-separated string back into a list
+        viewed_products = viewed_products.split()
+
+        # Retrieve the Item objects for the product IDs
+        items = Item.objects.filter(id__in=viewed_products)
+    else:
+        # If the cookie doesn't exist, display a message
+        items = None
+
+    # Get the user's visit history from the session
+    visit_history = request.session.get('visit_history', {})
+
+    # Get the currently logged-in user
+    current_user = request.user if request.user.is_authenticated else None
+
+    # Get the count of active users
+    authenticated_users_count = User.objects.filter(is_active=True).count()
+
+    return render(request, 'history.html', {
+        'items': items,
+        'visit_history': visit_history,
+        'current_user': current_user,
+        'authenticated_users_count': authenticated_users_count,
+    })
+@login_required
+def list_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('core:success')  # Redirect to a success page or wherever you want
+    else:
+        form = ItemForm()
+    return render(request, 'list_item.html', {'form': form})
+
+def success(request):
+    return render(request, 'success.html')
+# @login_required
+# def list_item(request):
+#     if request.method == 'POST':
+#         form = ItemForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Item successfully listed.')
+#             return redirect("core:index")
+#         else:
+#             return redirect("core:index")
+#     else:
+#         form = ItemForm()
+#     return render(request, 'list_item.html', {'form': form})
 
 
+def success(request):
+    return render(request, 'success.html')

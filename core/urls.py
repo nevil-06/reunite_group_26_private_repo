@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import search
+from .views import history_view, search
 from .views import list_item, success
 from .views import (
     AboutUsView,
@@ -19,7 +19,6 @@ from .views import (
 )
 
 
-
 app_name = 'core'
 
 urlpatterns = [
@@ -36,18 +35,12 @@ urlpatterns = [
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('search/', search, name='search'),
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
     path('history/', history_view, name='history'),
     path('list_item/', list_item, name='list_item'),
     path('about/', AboutUsView.as_view(), name='about'),
     path('contact/', ContactUsView.as_view(), name='contact'),
     path('success/', success, name='success'),
->>>>>>> Stashed changes
-
-=======
     path('list_item/', list_item, name='list_item'),
     path('success/', success, name='success'),
->>>>>>> a3f2336a48c8c26b763833a2735062daa1781292
+    path('refund/',RequestRefundView.as_view(),name ='refund'),
 ]

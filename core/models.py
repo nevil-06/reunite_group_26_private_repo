@@ -103,7 +103,7 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField(unique=True)
     stock_no = models.CharField(max_length=10)
-    description_short = models.CharField(max_length=50)
+    description_short = models.CharField(max_length=500)
     description_long = models.TextField()
     image = models.ImageField(upload_to='items/')
     is_active = models.BooleanField(default=True)
@@ -239,3 +239,5 @@ class Refund(models.Model):
 
     def __str__(self):
         return f"{self.pk}"
+
+

@@ -1,14 +1,30 @@
 from django import forms
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
-from .models import Item
-
-
+from .models import Item 
 PAYMENT_CHOICES = (
     ('S', 'Stripe'),
     ('P', 'PayPal')
 )
 
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = [
+            'title',               # Assuming there's a 'name' field
+            'size',               # The size field
+            'color',              # The color field
+            'price',              # The price field
+            'discount_price',     # The discount price field
+            'category',           # The category field
+            'label',              # The label field
+            'slug',               # The slug field
+            'stock_no',           # The stock number field
+            'description_short',  # The short description field
+            'description_long',   # The long description field
+            'image',              # The image field
+            'is_active',          # The is_active field
+        ]
 
 class CheckoutForm(forms.Form):
     street_address = forms.CharField(widget=forms.TextInput(attrs={
@@ -47,15 +63,13 @@ class RefundForm(forms.Form):
     email = forms.EmailField()
 
 
-<<<<<<< HEAD
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
-=======
+    
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = '__all__'
 
->>>>>>> a3f2336a48c8c26b763833a2735062daa1781292
