@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import history_view, search
 from .views import list_item, success
+from . import views
 from .views import (
     AboutUsView,
     ContactUsView,
@@ -12,9 +13,7 @@ from .views import (
     OrderSummaryView,
     remove_single_item_from_cart,
     CheckoutView,
-    PaymentView,
     AddCouponView,
-    RequestRefundView,
     CategoryView
 )
 
@@ -32,15 +31,18 @@ urlpatterns = [
     path('shop/', ShopView.as_view(), name='shop'),
     path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
     path('remove-item-from-cart/<slug>/', remove_single_item_from_cart,name='remove-single-item-from-cart'),
-    path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
-    path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
+    # path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
+    # path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
     path('search/', search, name='search'),
     path('history/', history_view, name='history'),
-    path('list_item/', list_item, name='list_item'),
     path('about/', AboutUsView.as_view(), name='about'),
     path('contact/', ContactUsView.as_view(), name='contact'),
-    path('success/', success, name='success'),
+    # path('success/', success, name='success'),
     path('list_item/', list_item, name='list_item'),
     path('success/', success, name='success'),
-    path('refund/',RequestRefundView.as_view(),name ='refund'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('password_reset/', views.password_reset, name='password_reset'),
 ]
+

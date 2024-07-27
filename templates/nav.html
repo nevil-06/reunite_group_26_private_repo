@@ -75,15 +75,15 @@
                             </li>
                             
                             <li>
-                                <a href="{% url 'account_logout' %}">Logout</a>
+                                <a href="{% url 'core:logout' %}">Logout</a>
                             </li>
                         {% else %}
                             <li>
                                 <img src="{% static 'images/icons/icon-header-01.png' %}" class="header-icon1"
                                      alt="ICON">
                                 <ul class="sub_menu">
-                                    <li><a href="{% url 'account_login' %}">Login</a></li>
-                                    <li><a href="{% url 'account_signup' %}">SignUp</a></li>
+                                    <li><a href="{% url 'core:login' %}">Login</a></li>
+                                    <li><a href="{% url 'core:signup' %}">SignUp</a></li>
                                 </ul>
                             </li>
                         {% endif %}
@@ -259,14 +259,14 @@
                     </li>
                     
                     <li class="item-menu-mobile">
-                        <a href="{% url 'account_logout' %}">Logout</a>
+                        <a href="{% url 'core:logout' %}">Logout</a>
                     </li>
                 {% else %}
                     <li class="item-menu-mobile">
                         <a href="#">Login</a>
                         <ul class="sub-menu">
-                            <li><a href="{% url 'account_login' %}">Login</a></li>
-                            <li><a href="{% url 'account_signup' %}">SignUp</a></li>
+                            <li><a href="{% url 'core:login' %}">Login</a></li>
+                            <li><a href="{% url 'core:signup' %}">SignUp</a></li>
                         </ul>
                         <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
                     </li>

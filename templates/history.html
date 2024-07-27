@@ -6,7 +6,18 @@
             text-decoration: underline;
         }
     </style>
+    
     <div style="margin-left: 10%; margin-top: 5%">
+        <div style="margin-top: 5%;">
+            <h2>Current User</h2>
+            {% if current_user %}
+                <p>Username: {{ current_user.username }}</p>
+                <p>Email: {{ current_user.email }}</p>
+            {% else %}
+                <p>No user is currently logged in.</p>
+            {% endif %}
+        </div>
+        <br>
         <h1>History</h1>
         <div style="margin-top: 2%;">
             {% if items %}
@@ -38,15 +49,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div style="margin-top: 5%;">
-            <h2>Current User</h2>
-            {% if current_user %}
-                <p>Username: {{ current_user.username }}</p>
-                <p>Email: {{ current_user.email }}</p>
-            {% else %}
-                <p>No user is currently logged in.</p>
-            {% endif %}
-        </div>
+        
         <div style="margin-top: 5%;">
             <h2>Authenticated Users Count</h2>
             <p>Total number of active users: {{ authenticated_users_count }}</p>
